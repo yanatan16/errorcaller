@@ -1,4 +1,4 @@
-errorcaller
+errorcaller [![Build Status][1]][2]
 ===========
 
 An error wrapper to attach caller (file:line) information to errors
@@ -39,8 +39,13 @@ Will output something like this:
 Oh noes! (on /Users/you/gopath/src/github.com/you/error-prone/errorprone.go:10)
 ```
 
+
 Note that performing `errorcaller.Err(errorcaller.Err(err))` is the same as doing it once because it won't overwrite a caller in the first place.
 
 ## License
 
-MIT-style in LICENSE file.
+MIT License found in LICENSE file.
+
+
+[1]: https://travis-ci.org/yanatan16/errorcaller.png?branch=master
+[2]: http://travis-ci.org/yanatan16/errorcaller
