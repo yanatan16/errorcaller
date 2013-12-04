@@ -18,23 +18,34 @@ func new(msg, stack string) error {
 }
 
 func New(msg string) error {
-	return new(msg, captureStack())
+	return new(msg, captureStack(0))
 }
 
 func Err(err error) error {
-	if ws, ok := err.(*ErrorCaller); ok {
+	if ecerr, ok := err.(*ErrorCaller); ok {
 		// Don't modify a ErrorCaller
-		return ws
+		return ecerr
 	}
-	return new(err.Error(), captureStack())
+	return new(err.Error(), captureStack(0))
 }
 
-func (ws *ErrorCaller) Error() string {
-	return ws.msg + " " + ws.stack
+func NewDeep(msg string, n int) error {
+	return new(msg, captureStack(n))
 }
 
-func captureStack() string {
-	_, file, line, ok := runtime.Caller(2)
+func ErrDeep(err error, n int) error {
+	if ecerr, ok := err.(*ErrorCaller); ok {
+		return ecerr
+	}
+	return new(err.Error(), captureStack(n))
+}
+
+func (ecerr *ErrorCaller) Error() string {
+	return ecerr.msg + " " + ecerr.stack
+}
+
+func captureStack(n int) string {
+	_, file, line, ok := runtime.Caller(n + 2)
 	if ok {
 		return fmt.Sprintf("(on %s:%d)", file, line)
 	}
